@@ -5,6 +5,7 @@ from .models import Achievement, Cat, User
 from .serializers import AchievementSerializer, CatSerializer, UserSerializer
 # from rest_framework import permissions
 from .permissions import OwnerOrReadOnly, ReadOnly
+from rest_framework.throttling import AnonRateThrottle
 
 
 class CatViewSet(viewsets.ModelViewSet):
@@ -13,6 +14,9 @@ class CatViewSet(viewsets.ModelViewSet):
     # Устанавливаем разрешение
     # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     permission_classes = (OwnerOrReadOnly,)
+    # throttle_classes = (AnonRateThrottle,)  # Подключили класс AnonRateThrottle 
+    # Для любых пользователей установим кастомный лимит 1 запрос в минуту
+    throttle_scope = 'low_request'
 
     def get_permissions(self):
         # Если в GET-запросе требуется получить информацию об объекте

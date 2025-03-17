@@ -134,6 +134,22 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+
+    # Ограничения на уровне проекта устанавливаются в файле settings.py: в словарь
+    # REST_FRAMEWORK необходимо добавить параметры DEFAULT_THROTTLE_CLASSES и DEFAULT_THROTTLE_RATES
+    # Имя user предустановлено в классе UserRateThrottle, а anon — в AnonRateThrottle.
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '10000/day',  # Лимит для UserRateThrottle
+        'anon': '1000/day',  # Лимит для AnonRateThrottle
+        # Имена (ключи) для scope придумывает разработчик, 
+        # в меру собственной фантазии
+        'low_request': '1/minute',
+    }
 }
 
 SIMPLE_JWT = {
