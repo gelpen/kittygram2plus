@@ -7,6 +7,6 @@ class WorkingHoursRateThrottle(throttling.BaseThrottle):
 
     def allow_request(self, request, view):
         now = datetime.datetime.now().hour
-        if now >= 18 and now < 19:
+        if now >= 13 and now < 14:
             return False
         return True

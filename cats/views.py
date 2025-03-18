@@ -8,6 +8,9 @@ from .permissions import OwnerOrReadOnly, ReadOnly
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.throttling import ScopedRateThrottle
 from .throttling import WorkingHoursRateThrottle
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import LimitOffsetPagination
+from .pagination import CatsPagination
 
 
 class CatViewSet(viewsets.ModelViewSet):
@@ -17,14 +20,21 @@ class CatViewSet(viewsets.ModelViewSet):
     # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     permission_classes = (OwnerOrReadOnly,)
     # throttle_classes = (AnonRateThrottle,)  # Подключили класс AnonRateThrottle
-    
+
     # Если кастомный тротлинг-класс вернёт True - запросы будут обработаны
     # Если он вернёт False - все запросы будут отклонены
     throttle_classes = (WorkingHoursRateThrottle, ScopedRateThrottle)
-    # А далее применится лимит low_request 
-    
+    # А далее применится лимит low_request
+
     # Для любых пользователей установим кастомный лимит 1 запрос в минуту
-    throttle_scope = 'low_request'
+    # throttle_scope = 'low_request'
+
+    # pagination_class = PageNumberPagination
+    # Даже если на уровне проекта установлен PageNumberPagination
+    # Для котиков будет работать LimitOffsetPagination
+    # pagination_class = LimitOffsetPagination
+    # Вот он наш собственный класс пагинации с page_size=20
+    pagination_class = CatsPagination
 
     def get_permissions(self):
         # Если в GET-запросе требуется получить информацию об объекте
